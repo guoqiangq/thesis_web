@@ -16,7 +16,8 @@ const API_HOST = import.meta.env.VITE_NODE_ENV
 
 function ajax ( url:String, data:Object, method = 'POST', type = 'application/x-www-form-urlencoded' ) {
   
-  let token = session.getLocal( 'assess_Token' );;
+  let token = session.get( 'assess_Token' );
+  console.log(token);
   let options = {
     url : url,
     header : {
@@ -46,7 +47,7 @@ function ajax ( url:String, data:Object, method = 'POST', type = 'application/x-
       if ( res.data.code === 0 || res.data.code === 404 ) { // 请求正常
         resolve( res )
       }
-      else if ( res.data.code === 908 ) {
+      else if ( res.data.code === 908||res.data.code === 401 ) {
         if ( isRefreshing ) { // 第一个接受到的token失效请求 重新登录
           toLogin()
         }
@@ -65,7 +66,7 @@ function ajax ( url:String, data:Object, method = 'POST', type = 'application/x-
         } )
       }
       else if(res&&res.data){
-        $message.error( res.data.data?.message || res.data.message );
+        $message.error( res.data.data?.message || res.data.message|| res.data.msg );
         resolve( res );
       }
       else {
@@ -79,8 +80,8 @@ function ajax ( url:String, data:Object, method = 'POST', type = 'application/x-
 
 // 刷新token函数
 function refreshTokenRequst () {
-  let token = session.getLocal( 'refresh_Token' );
-  session.setLocal( 'assess_Token', token );
+  let token = session.get( 'refresh_Token' );
+  session.set( 'assess_Token', token );
   let type = 'application/x-www-form-urlencoded';
   let a = {
     url : apiConfig.domainUrl + '/v1/sign/auto',
@@ -94,10 +95,9 @@ function refreshTokenRequst () {
   Axios( a ).then( ( res ) => {
     if ( res.data.code == 0 ) {
       // 刷新完成后,将刷新token存储到本地1
-      let { access_token, refresh_token ,plugin_token } = res.data.data;
-      session.setLocal( 'assess_Token', access_token );
-      session.setLocal( 'refresh_Token', refresh_token );
-      session.setLocal( 'plugin_token', plugin_token );
+      let { access_token } = res.data.token;
+      session.set( 'assess_Token', access_token );
+
       
       // 并且将所有存储到观察者数组中的请求重新执行。
       onAccessTokenFetched();
@@ -125,7 +125,7 @@ function toLogin () {
   // 登录
   $message.warning('登录已过期,请重新登录!!');
   session.clear();
-  Router.replace( { name : 'Home' } );
+  Router.replace( { name : 'Index' } );
   
   setTimeout( () => {
     isRefreshing = true;

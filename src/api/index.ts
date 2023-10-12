@@ -40,6 +40,10 @@ export const getUserFind = ( params:object ) => {
   return getData( config.domainUrl + '/user/findUser' , params )
 };
 // 登录
+export const gerUserLogin = (params:object)=>{
+  return postData(config.domainUrl + '/user/login',params)
+}
+// 登录
 export const checkLogin = (params:object)=>{
   return postData(config.domainUrl + '/user/getUser',params)
 }

@@ -37,7 +37,6 @@ import {defineComponent , onMounted , Ref , ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {useStore} from 'vuex'
 import {getPublishAllList, postPublishDelete} from '@/api'
-import session from "@/plugins/storage.ts";
 
 interface DataItem {
   id: number,

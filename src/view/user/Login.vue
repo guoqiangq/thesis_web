@@ -67,7 +67,7 @@
 //引入
 import { defineComponent, getCurrentInstance, onMounted,reactive,computed } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
-import {checkLogin } from "../../api"
+import {checkLogin ,gerUserLogin} from "../../api"
 import {useRouter} from 'vue-router'
 import session from '../../plugins/storage'
 
@@ -103,11 +103,12 @@ export default defineComponent({
         login_name : formState.username,
         password : formState.password
       }
-      checkLogin(params).then((res:any) => {
+      gerUserLogin(params).then((res:any) => {
         if(res.data.code!==0) return
         proxy.$message.success('登录成功!');
         session.set("userName",res.data.data.user_name)
         session.set("userId",res.data.data.id)
+        session.set("assess_Token",res.data.token)
         router.push({
           name: 'Home'
         })

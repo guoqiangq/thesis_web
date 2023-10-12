@@ -17,7 +17,7 @@ function processUserToken() {
   axios.defaults.timeout = 180 * 1000;
   // axios.defaults.headers.post[ 'Content-Type' ] = 'application/x-www-form-urlencoded';
   axios.interceptors.request.use( function ( request ) {
-    let usertoken = session.getLocal( 'assess_Token' ) || '';
+    let usertoken = session.get( 'assess_Token' ) || '';
     request.headers.Authorization = usertoken;
     return request;
   } , function () {

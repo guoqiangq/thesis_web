@@ -28,7 +28,7 @@
               @search="table_Data"
           />
         </div>
-        <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData" style="margin-top: 20px;background: #ffffff;">
+        <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData" style="margin-top: 20px;background: #ffffff;padding-bottom: 20px;">
           <template #renderItem="{ item }">
             <a-list-item :key="item.id" style="background: #ffffff;">
               <a-list-item-meta >
